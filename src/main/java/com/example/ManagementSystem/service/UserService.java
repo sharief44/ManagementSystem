@@ -5,6 +5,8 @@ package com.example.ManagementSystem.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.example.ManagementSystem.dto.UserRequest;
@@ -17,6 +19,9 @@ import com.example.ManagementSystem.repository.UserRepository;
 public class UserService {
 
     private final UserRepository repo;
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    
+    
 
     public UserService(UserRepository repo) {
         this.repo = repo;
@@ -33,6 +38,9 @@ public class UserService {
         user.setEmail(request.getEmail());
 
         User saved = repo.save(user);
+        log.info("Creating user with email: {}", request.getEmail());
+
+        log.warn("Duplicate email attempt: {}", request.getEmail());
 
         return mapToResponse(saved);
     }

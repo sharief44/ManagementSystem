@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ManagementSystem.dto.ApiResponse;
 import com.example.ManagementSystem.dto.UserRequest;
 import com.example.ManagementSystem.dto.UserResponse;
 import com.example.ManagementSystem.service.UserService;
@@ -25,9 +27,9 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping
-	public UserResponse create(@Valid @RequestBody UserRequest request) {
-		return service.createUser(request);
+	@PostMapping
+	public ApiResponse<UserResponse> create(@Valid @RequestBody UserRequest request) {
+	    return new ApiResponse<>(true, "User created", service.createUser(request));
 	}
 	
 	@GetMapping
