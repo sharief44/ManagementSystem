@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.ManagementSystem.dto.UserRequest;
@@ -20,11 +21,13 @@ public class UserService {
 
     private final UserRepository repo;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
+    private final PasswordEncoder passwordEncoder;
     
     
 
-    public UserService(UserRepository repo) {
+    public UserService(UserRepository repo, PasswordEncoder passwordEncoder) {
         this.repo = repo;
+        this.passwordEncoder=passwordEncoder;
     }
 
     public UserResponse createUser(UserRequest request) {
@@ -36,6 +39,7 @@ public class UserService {
         User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         User saved = repo.save(user);
         log.info("Creating user with email: {}", request.getEmail());
